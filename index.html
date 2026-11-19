@@ -24,13 +24,15 @@
       width: 90%;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     }
-    .gif {
-      width: 160px;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 14px;
-      margin: 0 auto 14px auto;
+    .cat-emoji {
+      font-size: 64px;
+      margin-bottom: 10px;
       display: block;
+      animation: bounce 1s infinite alternate;
+    }
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-10px); }
     }
     h1 {
       font-size: 22px;
@@ -48,15 +50,13 @@
       align-items: center;
       gap: 14px;
     }
-    .btn {
+    button {
       padding: 12px 28px;
       border-radius: 999px;
       font-weight: bold;
       font-size: 15px;
       border: none;
       cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
       transition: transform 0.15s ease;
     }
     #yes {
@@ -72,28 +72,31 @@
 </head>
 <body>
   <div class="card">
-    <img class="gif" src="https://tenor.com" alt="Kucing Lucu" onerror="this.style.display='none'" />
+    <span class="cat-emoji">🥺🐱</span>
     <h1>Suka Ba Jalan Ni Minggu?</h1>
     <p>Jang Ba Paksa, cuma boleh lo</p>
     <div class="btns">
-      <a id="yes" class="btn" href="#">Yes</a>
-      <button id="no" class="btn" type="button">No</button>
+      <button id="yes" type="button" onclick="bukaWA()">Yes</button>
+      <button id="no" type="button">No</button>
     </div>
   </div>
 
   <script>
-    // Merakit alamat WhatsApp secara utuh tanpa terpotong
-    const domain = "https://" + "://whatsapp.com" + "/send";
-    const nomor = "628891261808";
-    const teks = encodeURIComponent("Begitu kwa , so nemboleh mo rubah pikiran !!");
-    const urlTujuan = domain + "?phone=" + nomor + "&text=" + teks;
+    function bukaWA() {
+      const no = "628891261808";
+      const pesan = encodeURIComponent("Begitu kwa , so nemboleh mo rubah pikiran !!");
+      
+      // 1. Panggil langsung aplikasi WhatsApp di HP
+      window.top.location.href = "whatsapp://send?phone=" + no + "&text=" + pesan;
+      
+      // 2. Cadangan jika dibuka lewat Laptop/PC
+      setTimeout(function() {
+        window.top.location.href = "https://" + "://whatsapp.com" + "/send?phone=" + no + "&text=" + pesan;
+      }, 800);
+    }
 
-    // Memasang link utuh ke tombol Yes
-    const yesBtn = document.getElementById("yes");
-    yesBtn.setAttribute("href", urlTujuan);
-
-    // Logika tombol No kabur
     const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
     let skalaYes = 1;
 
     function kabur() {
