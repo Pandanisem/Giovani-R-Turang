@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ajakan Kencan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff0f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      text-align: center;
+    }
+    .card {
+      background: #fff;
+      padding: 30px 24px;
+      border-radius: 16px;
+      max-width: 360px;
+      width: 90%;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+    h1 { font-size: 22px; color: #c9184a; margin-bottom: 8px; }
+    p { font-size: 15px; color: #444; margin-bottom: 24px; }
+    .btns { display: flex; justify-content: center; gap: 14px; }
+    button, a {
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    #yes { background: #25d366; color: #fff; }
+    #no { background: #e0e0e0; color: #333; position: relative; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Mau Kencan Minggu Ini?</h1>
+    <p>Pilih jawaban yang jujur ya...</p>
+    <div class="btns">
+      <a id="yes" href="https://wa.me!">Yes</a>
+      <button id="no" type="button">No</button>
+    </div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("no");
+    function kabur() {
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 20);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 20);
+      noBtn.style.position = "fixed";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+    noBtn.addEventListener("mouseover", kabur);
+    noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); kabur(); });
+  </script>
+</body>
+</html>
