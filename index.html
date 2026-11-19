@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ajakan Jalan</title>
+  <title>Suka Ba Jalan Ni Minggu?</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -25,11 +25,14 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     }
     .gif {
-      width: 150px;
-      height: 150px;
+      width: 160px;
+      height: 160px;
       object-fit: cover;
       border-radius: 14px;
       margin-bottom: 14px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
     h1 {
       font-size: 22px;
@@ -44,15 +47,18 @@
     .btns {
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 14px;
     }
-    button {
+    .btn {
       padding: 12px 28px;
       border-radius: 999px;
       font-weight: bold;
       font-size: 15px;
       border: none;
       cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
       transition: transform 0.15s ease;
     }
     #yes {
@@ -68,26 +74,16 @@
 </head>
 <body>
   <div class="card">
-    <img class="gif" src="https://tenor.com" alt="Kucing Lucu" />
+    <img class="gif" src="https://giphy.com" alt="Kucing Lucu" />
     <h1>Suka Ba Jalan Ni Minggu?</h1>
-    <p>Jang Ba Paksa, cuma boleh Io </p>
+    <p>Jang Ba Paksa, cuma boleh lo</p>
     <div class="btns">
-      <button id="yes" type="button">Yes</button>
-      <button id="no" type="button">No</button>
+      <a id="yes" class="btn" href="https://wa.me!!">Yes</a>
+      <button id="no" class="btn" type="button">No</button>
     </div>
   </div>
 
   <script>
-    const nomorWA = "628891261808";
-    const pesanBalasan = "Begitu kwa , so nemboleh mo rubah pikiran !!";
-
-    // Klik Yes langsung buka WA dengan pesan terisi otomatis
-    document.getElementById("yes").addEventListener("click", function () {
-      const linkWA = "https://whatsapp.com" + nomorWA + "&text=" + encodeURIComponent(pesanBalasan);
-      window.location.href = linkWA;
-    });
-
-    // Tombol No kabur saat disentuh atau didekati kursor
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
     let skalaYes = 1;
@@ -99,7 +95,6 @@
       noBtn.style.left = x + "px";
       noBtn.style.top = y + "px";
 
-      // Tombol Yes ikut membesar sedikit setiap kali tombol No dikejar
       skalaYes += 0.1;
       yesBtn.style.transform = "scale(" + skalaYes + ")";
     }
