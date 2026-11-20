@@ -51,7 +51,7 @@
       background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
       color: #ffffff; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35); cursor: pointer;
     }
-    #btn-no {
+    #no {
       padding: 14px 32px; border-radius: 999px; font-family: inherit;
       font-weight: 700; font-size: 15px; border: none;
       background: #f1f3f5; color: #495057; cursor: pointer; z-index: 999;
@@ -85,23 +85,17 @@
       background: #fff8f9; color: #2b2d42;
     }
 
-    #link-wa {
-      display: block; width: 100%; text-align: center; text-decoration: none;
+    #btn-kirim {
+      width: 100%; border: none; font-family: inherit;
       font-weight: 700; background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
       color: #ffffff; padding: 16px; font-size: 16px; border-radius: 16px;
-      box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
-      margin-bottom: 10px;
+      box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3); cursor: pointer;
     }
-
-    #btn-salin {
-      width: 100%; padding: 13px; border-radius: 14px; font-family: inherit;
-      font-weight: 600; font-size: 14px; border: 1.5px solid #ffccd5;
-      background: #fff0f3; color: #a4133c; cursor: pointer;
-    }
-
-    #notif-salin {
-      display: none; margin-top: 10px; font-size: 13px; font-weight: 600;
-      color: #128c7e; text-align: center;
+    .toast-error {
+      display: none; background: #ffe3e3; color: #c92a2a;
+      font-size: 13px; font-weight: 600; padding: 10px 14px;
+      border-radius: 10px; margin-bottom: 14px; text-align: center;
+      border: 1px solid #ffa8a8;
     }
   </style>
 </head>
@@ -115,8 +109,8 @@
     <h1>Suka Ba Jalan Ni Minggu?</h1>
     <p>Jang ba paksa, cuma boleh jo lo ✨</p>
     <div class="btns">
-      <label for="pindah-halaman" class="btn-yes" id="btn-yes">Yes, Gas!</label>
-      <button id="btn-no" type="button" onclick="lari()" ontouchstart="lari()" onmouseover="lari()">No</button>
+      <label for="pindah-halaman" class="btn-yes" id="yes">Yes, Gas!</label>
+      <button id="no" type="button">No</button>
     </div>
   </div>
 
@@ -126,15 +120,15 @@
     <p class="sub">Pilih 1 tempat tujuan & atur jamnya ya</p>
 
     <div class="opsi-list">
-      <label class="opsi-item" onclick="setTujuan('Pergi ke pantai')">
+      <label class="opsi-item">
         <div class="opsi-kiri">
           <span class="opsi-icon">🏖️</span>
           <span class="opsi-teks">Pergi ke pantai</span>
         </div>
-        <input type="radio" name="tujuan" value="Pergi ke pantai" checked>
+        <input type="radio" name="tujuan" value="Pergi ke pantai">
       </label>
 
-      <label class="opsi-item" onclick="setTujuan('Pergi ke Danau Moat')">
+      <label class="opsi-item">
         <div class="opsi-kiri">
           <span class="opsi-icon">🏞️</span>
           <span class="opsi-teks">Pergi ke Danau Moat</span>
@@ -142,7 +136,7 @@
         <input type="radio" name="tujuan" value="Pergi ke Danau Moat">
       </label>
 
-      <label class="opsi-item" onclick="setTujuan('Pergi ke Manado')">
+      <label class="opsi-item">
         <div class="opsi-kiri">
           <span class="opsi-icon">🏙️</span>
           <span class="opsi-teks">Pergi ke Manado</span>
@@ -150,7 +144,7 @@
         <input type="radio" name="tujuan" value="Pergi ke Manado">
       </label>
 
-      <label class="opsi-item" onclick="setTujuan('Di Kotamobagu saja')">
+      <label class="opsi-item">
         <div class="opsi-kiri">
           <span class="opsi-icon">☕</span>
           <span class="opsi-teks">Di Kotamobagu saja</span>
@@ -161,61 +155,62 @@
 
     <div class="jam-group">
       <label for="pilih-jam">⏰ Jam berapa siap?</label>
-      <input type="time" id="pilih-jam" value="16:00" onchange="updateWA()" oninput="updateWA()">
+      <input type="time" id="pilih-jam" value="16:00">
     </div>
 
-    <!-- Menggunakan target="_blank" dan rel="noopener noreferrer" agar tidak kena about:blank#blocked -->
-    <a id="link-wa" href="https://whatsapp.com" target="_blank" rel="noopener noreferrer">
-      Kirim ke WhatsApp 🚀
-    </a>
+    <div class="toast-error" id="pesan-error">Pilih dulu salah satu tempat tujuannya ya 😊</div>
 
-    <button id="btn-salin" type="button" onclick="salinTeks()">📋 Salin Teks Pilihan (Jika WA Terblokir)</button>
-    <div id="notif-salin">Teks tersalin! Tinggal tempel di chat WhatsApp ya 🥰</div>
+    <button id="btn-kirim" type="button" onclick="bukaWA()">Kirim ke WhatsApp 🚀</button>
   </div>
 
   <script>
-    var skala = 1;
-    var tempatTerpilih = "Pergi ke pantai";
+    function bukaWA() {
+      const pilihan = document.querySelector('input[name="tujuan"]:checked');
+      const jam = document.getElementById("pilih-jam").value || "16:00";
+      const errBox = document.getElementById("pesan-error");
 
-    function lari() {
-      var btnNo = document.getElementById("btn-no");
-      var btnYes = document.getElementById("btn-yes");
-      var maxX = Math.max(20, window.innerWidth - 120);
-      var maxY = Math.max(20, window.innerHeight - 60);
-      btnNo.style.position = "fixed";
-      btnNo.style.left = Math.floor(Math.random() * maxX) + "px";
-      btnNo.style.top = Math.floor(Math.random() * maxY) + "px";
-      skala += 0.12;
-      btnYes.style.transform = "scale(" + skala + ")";
+      if (!pilihan) {
+        errBox.style.display = "block";
+        return;
+      }
+
+      errBox.style.display = "none";
+
+      const no = "628891261808";
+      const teks = "Okeeeeyyy gas! Minggu ini kita jalan:\n\n" +
+                   "Pilihan Tempat: " + pilihan.value + "\n" +
+                   "Jam: " + jam + " WITA";
+      const pesan = encodeURIComponent(teks);
+
+      // 1. Panggil langsung aplikasi WhatsApp di HP (sama persis seperti kode asli Anda)
+      window.top.location.href = "whatsapp://send?phone=" + no + "&text=" + pesan;
+
+      // 2. Cadangan jika dibuka lewat Laptop/PC
+      setTimeout(function() {
+        window.top.location.href = "https://whatsapp.com" + no + "&text=" + pesan;
+      }, 800);
     }
 
-    function buatPesan() {
-      var jam = document.getElementById("pilih-jam").value || "16:00";
-      return "Okeeeeyyy gas! Minggu ini kita jalan:\n\n" +
-             "Pilihan Tempat: " + tempatTerpilih + "\n" +
-             "Jam: " + jam + " WITA";
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    let skalaYes = 1;
+
+    function kabur() {
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 24);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 24);
+      noBtn.style.position = "fixed";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+
+      skalaYes += 0.1;
+      yesBtn.style.transform = "scale(" + skalaYes + ")";
     }
 
-    function setTujuan(namaTempat) {
-      tempatTerpilih = namaTempat;
-      updateWA();
-    }
-
-    function updateWA() {
-      var pesan = buatPesan();
-      document.getElementById("link-wa").href = "https://whatsapp.com" + encodeURIComponent(pesan);
-    }
-
-    function salinTeks() {
-      var pesan = buatPesan();
-      var area = document.createElement("textarea");
-      area.value = pesan;
-      document.body.appendChild(area);
-      area.select();
-      document.execCommand("copy");
-      document.body.removeChild(area);
-      document.getElementById("notif-salin").style.display = "block";
-    }
+    noBtn.addEventListener("mouseover", kabur);
+    noBtn.addEventListener("touchstart", function (e) {
+      e.preventDefault();
+      kabur();
+    });
   </script>
 </body>
 </html>
