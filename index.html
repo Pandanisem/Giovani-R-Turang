@@ -24,7 +24,6 @@
       position: relative;
     }
 
-    /* Hiasan lingkaran blur di latar belakang */
     .bg-circle {
       position: fixed;
       border-radius: 50%;
@@ -48,26 +47,45 @@
       right: -60px;
     }
 
+    /* Checkbox tersembunyi untuk pindah halaman tanpa harus bergantung pada JS */
+    #toggle-halaman {
+      display: none;
+    }
+
     .card {
       position: relative;
       z-index: 1;
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid #ffffff;
       padding: 36px 28px;
       border-radius: 28px;
       max-width: 400px;
       width: 100%;
       box-shadow: 0 20px 40px rgba(201, 24, 74, 0.15);
       text-align: center;
-      animation: fadeInScale 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Logika Perpindahan Halaman Murni CSS */
+    #halaman-awal {
+      display: block;
+    }
+    #halaman-pilihan {
+      display: none;
+      text-align: left;
+    }
+
+    #toggle-halaman:checked ~ #halaman-awal {
+      display: none;
+    }
+    #toggle-halaman:checked ~ #halaman-pilihan {
+      display: block;
+      animation: fadeInScale 0.45s ease;
     }
 
     @keyframes fadeInScale {
       from {
         opacity: 0;
-        transform: translateY(20px) scale(0.95);
+        transform: translateY(15px) scale(0.96);
       }
       to {
         opacity: 1;
@@ -121,44 +139,43 @@
       min-height: 52px;
     }
 
-    button {
+    /* Tombol Yes dibuat dari label agar pasti berfungsi */
+    .btn-yes {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 15px;
+      background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-yes:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(37, 211, 102, 0.45);
+    }
+
+    #no {
       padding: 14px 32px;
       border-radius: 999px;
       font-family: inherit;
       font-weight: 700;
       font-size: 15px;
       border: none;
-      cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    #yes {
-      background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-      color: #ffffff;
-      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
-      position: relative;
-      z-index: 1;
-    }
-
-    #yes:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(37, 211, 102, 0.45);
-    }
-
-    #no {
       background: #f1f3f5;
       color: #495057;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
       position: relative;
-      z-index: 2;
+      z-index: 99;
+      transition: left 0.15s ease, top 0.15s ease;
     }
 
     /* HALAMAN 2: PILIHAN */
-    #halaman-pilihan {
-      display: none;
-      text-align: left;
-    }
-
     #halaman-pilihan h2 {
       font-size: 22px;
       font-weight: 800;
@@ -190,15 +207,12 @@
       border: 2px solid #ffe5ec;
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
     }
 
     .opsi-item:hover {
       border-color: #ff8fa3;
-      transform: translateY(-2px);
     }
 
-    /* Highlight kartu saat dicentang */
     .opsi-item:has(input:checked) {
       background: #fff0f3;
       border-color: #ff4d6d;
@@ -262,20 +276,19 @@
       background: #fff8f9;
       color: #2b2d42;
       outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .jam-group input[type="time"]:focus {
-      border-color: #ff4d6d;
     }
 
     #kirim-wa {
       width: 100%;
+      border: none;
+      font-family: inherit;
+      font-weight: 700;
       background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
       color: #ffffff;
       padding: 16px;
       font-size: 16px;
       border-radius: 16px;
+      cursor: pointer;
       box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
       display: flex;
       align-items: center;
@@ -283,12 +296,6 @@
       gap: 8px;
     }
 
-    #kirim-wa:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 24px rgba(37, 211, 102, 0.4);
-    }
-
-    /* Notifikasi error halus pengganti alert() */
     .toast-error {
       display: none;
       background: #ffe3e3;
@@ -308,6 +315,9 @@
   <div class="bg-circle circle-1"></div>
   <div class="bg-circle circle-2"></div>
 
+  <!-- PENGONTROL HALAMAN TANPA JAVASCRIPT -->
+  <input type="checkbox" id="toggle-halaman">
+
   <!-- HALAMAN 1: AJAKAN -->
   <div class="card" id="halaman-awal">
     <div class="cat-wrapper">
@@ -316,7 +326,7 @@
     <h1>Suka Ba Jalan Ni Minggu?</h1>
     <p>Jang ba paksa, cuma boleh jo lo ✨</p>
     <div class="btns">
-      <button id="yes" type="button" onclick="bukaPilihan()">Yes, Gas!</button>
+      <label for="toggle-halaman" class="btn-yes" id="yes">Yes, Gas!</label>
       <button id="no" type="button">No</button>
     </div>
   </div>
@@ -378,10 +388,13 @@
     let skalaYes = 1;
 
     function kabur() {
-      const maxX = Math.max(16, window.innerWidth - noBtn.offsetWidth - 32);
-      const maxY = Math.max(16, window.innerHeight - noBtn.offsetHeight - 32);
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
+      const lebarLayar = document.documentElement.clientWidth || window.innerWidth;
+      const tinggiLayar = document.documentElement.clientHeight || window.innerHeight;
+      
+      const maxX = Math.max(16, lebarLayar - noBtn.offsetWidth - 32);
+      const maxY = Math.max(16, tinggiLayar - noBtn.offsetHeight - 32);
+      const x = Math.floor(Math.random() * maxX);
+      const y = Math.floor(Math.random() * maxY);
 
       noBtn.style.position = "fixed";
       noBtn.style.left = x + "px";
@@ -392,16 +405,3 @@
     }
 
     noBtn.addEventListener("mouseover", kabur);
-    noBtn.addEventListener("touchstart", function (e) {
-      e.preventDefault();
-      kabur();
-    });
-
-    function bukaPilihan() {
-      const hal1 = document.getElementById("halaman-awal");
-      const hal2 = document.getElementById("halaman-pilihan");
-      
-      hal1.style.display = "none";
-      hal2.style.display = "block";
-      // Reset animasi agar halaman 2 muncul mulus
-      hal2.style.animation = "none";
