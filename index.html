@@ -6,12 +6,7 @@
   <title>Suka Ba Jalan Ni Minggu?</title>
   <link href="https://googleapis.com" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 50%, #ffb3c6 100%);
@@ -22,11 +17,7 @@
       padding: 20px;
       overflow-x: hidden;
     }
-
-    #pindah-halaman {
-      display: none;
-    }
-
+    #pindah-halaman { display: none; }
     .card {
       background: #ffffff;
       padding: 36px 28px;
@@ -36,241 +27,72 @@
       box-shadow: 0 20px 40px rgba(201, 24, 74, 0.15);
       text-align: center;
     }
-
-    #halaman-2 {
-      display: none;
-      text-align: left;
-    }
-
-    #pindah-halaman:checked ~ #halaman-1 {
-      display: none;
-    }
-    #pindah-halaman:checked ~ #halaman-2 {
-      display: block;
-    }
+    #halaman-2 { display: none; text-align: left; }
+    #pindah-halaman:checked ~ #halaman-1 { display: none; }
+    #pindah-halaman:checked ~ #halaman-2 { display: block; }
 
     .cat-wrapper {
-      width: 96px;
-      height: 96px;
-      margin: 0 auto 18px;
+      width: 96px; height: 96px; margin: 0 auto 18px;
       background: linear-gradient(135deg, #fff0f3, #ffccd5);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
     }
-
-    .cat-emoji {
-      font-size: 52px;
-      display: block;
-      animation: bounce 1.2s infinite alternate ease-in-out;
-    }
-
+    .cat-emoji { font-size: 52px; display: block; animation: bounce 1.2s infinite alternate ease-in-out; }
     @keyframes bounce {
       from { transform: translateY(2px) rotate(-3deg); }
       to { transform: translateY(-8px) rotate(3deg); }
     }
+    h1 { font-size: 24px; font-weight: 800; color: #a4133c; margin-bottom: 8px; }
+    p { font-size: 14px; color: #6c5860; margin-bottom: 28px; }
 
-    h1 {
-      font-size: 24px;
-      font-weight: 800;
-      color: #a4133c;
-      margin-bottom: 8px;
-    }
-
-    p {
-      font-size: 14px;
-      color: #6c5860;
-      margin-bottom: 28px;
-    }
-
-    .btns {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 16px;
-      min-height: 52px;
-    }
-
+    .btns { display: flex; justify-content: center; align-items: center; gap: 16px; min-height: 52px; }
     .btn-yes {
-      display: inline-block;
-      padding: 14px 32px;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 15px;
+      display: inline-block; padding: 14px 32px; border-radius: 999px;
+      font-weight: 700; font-size: 15px;
       background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-      color: #ffffff;
-      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
-      cursor: pointer;
-      user-select: none;
+      color: #ffffff; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35); cursor: pointer;
     }
-
     #btn-no {
-      padding: 14px 32px;
-      border-radius: 999px;
-      font-family: inherit;
-      font-weight: 700;
-      font-size: 15px;
-      border: none;
-      background: #f1f3f5;
-      color: #495057;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      cursor: pointer;
-      z-index: 999;
+      padding: 14px 32px; border-radius: 999px; font-family: inherit;
+      font-weight: 700; font-size: 15px; border: none;
+      background: #f1f3f5; color: #495057; cursor: pointer; z-index: 999;
     }
 
-    /* HALAMAN 2 */
-    #halaman-2 h2 {
-      font-size: 22px;
-      font-weight: 800;
-      color: #a4133c;
-      margin-bottom: 6px;
-      text-align: center;
-    }
-
-    #halaman-2 .sub {
-      text-align: center;
-      margin-bottom: 22px;
-      font-size: 13.5px;
-    }
-
-    .opsi-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 22px;
-    }
-
+    #halaman-2 h2 { font-size: 22px; font-weight: 800; color: #a4133c; margin-bottom: 6px; text-align: center; }
+    #halaman-2 .sub { text-align: center; margin-bottom: 22px; font-size: 13.5px; }
+    .opsi-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
     .opsi-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #ffffff;
-      padding: 14px 16px;
-      border-radius: 16px;
-      border: 2px solid #ffe5ec;
-      cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      background: #ffffff; padding: 14px 16px; border-radius: 16px;
+      border: 2px solid #ffe5ec; cursor: pointer;
     }
-
-    .opsi-item:has(input:checked) {
-      background: #fff0f3;
-      border-color: #ff4d6d;
-    }
-
-    .opsi-kiri {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
+    .opsi-item:has(input:checked) { background: #fff0f3; border-color: #ff4d6d; }
+    .opsi-kiri { display: flex; align-items: center; gap: 12px; }
     .opsi-icon {
-      font-size: 22px;
-      background: #fff5f7;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
+      font-size: 22px; background: #fff5f7; width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center; border-radius: 12px;
     }
-
-    .opsi-teks {
-      font-size: 15px;
-      font-weight: 600;
-      color: #2b2d42;
-    }
-
-    .opsi-item input[type="radio"] {
-      width: 20px;
-      height: 20px;
-      accent-color: #ff4d6d;
-    }
+    .opsi-teks { font-size: 15px; font-weight: 600; color: #2b2d42; }
+    .opsi-item input[type="radio"] { width: 20px; height: 20px; accent-color: #ff4d6d; }
 
     .jam-group {
-      background: #ffffff;
-      padding: 16px;
-      border-radius: 16px;
-      border: 2px solid #ffe5ec;
-      margin-bottom: 22px;
+      background: #ffffff; padding: 16px; border-radius: 16px;
+      border: 2px solid #ffe5ec; margin-bottom: 22px;
     }
-
-    .jam-group label {
-      display: block;
-      font-size: 13.5px;
-      font-weight: 700;
-      color: #a4133c;
-      margin-bottom: 8px;
-    }
-
+    .jam-group label { display: block; font-size: 13.5px; font-weight: 700; color: #a4133c; margin-bottom: 8px; }
     .jam-group input[type="time"] {
-      width: 100%;
-      padding: 12px 14px;
-      font-family: inherit;
-      font-size: 16px;
-      font-weight: 700;
-      border: 1.5px solid #ffccd5;
-      border-radius: 12px;
-      background: #fff8f9;
-      color: #2b2d42;
+      width: 100%; padding: 12px 14px; font-family: inherit; font-size: 16px;
+      font-weight: 700; border: 1.5px solid #ffccd5; border-radius: 12px;
+      background: #fff8f9; color: #2b2d42;
     }
 
-    .aksi-btns {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    #btn-kirim {
-      width: 100%;
-      border: none;
-      font-family: inherit;
-      font-weight: 700;
-      background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-      color: #ffffff;
-      padding: 16px;
-      font-size: 16px;
-      border-radius: 16px;
+    #link-wa {
+      display: block; width: 100%; text-align: center; text-decoration: none;
+      font-weight: 700; background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+      color: #ffffff; padding: 16px; font-size: 16px; border-radius: 16px;
       box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
-      cursor: pointer;
     }
-
-    #btn-salin {
-      width: 100%;
-      border: 1.5px solid #ffccd5;
-      font-family: inherit;
-      font-weight: 600;
-      background: #fff0f3;
-      color: #a4133c;
-      padding: 12px;
-      font-size: 14px;
-      border-radius: 14px;
-      cursor: pointer;
-    }
-
-    .toast-error {
-      display: none;
-      background: #ffe3e3;
-      color: #c92a2a;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 10px 14px;
-      border-radius: 10px;
-      margin-bottom: 14px;
-      text-align: center;
-      border: 1px solid #ffa8a8;
-    }
-
-    .toast-sukses {
-      display: none;
-      background: #d3f9d8;
-      color: #2b8a3e;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 10px 14px;
-      border-radius: 10px;
-      margin-top: 10px;
-      text-align: center;
-      border: 1px solid #8ce99a;
+    .catatan-buka {
+      margin-top: 12px; font-size: 12px; color: #888; text-align: center;
     }
   </style>
 </head>
@@ -280,9 +102,7 @@
 
   <!-- HALAMAN 1 -->
   <div class="card" id="halaman-1">
-    <div class="cat-wrapper">
-      <span class="cat-emoji">🥺🐱</span>
-    </div>
+    <div class="cat-wrapper"><span class="cat-emoji">🥺🐱</span></div>
     <h1>Suka Ba Jalan Ni Minggu?</h1>
     <p>Jang ba paksa, cuma boleh jo lo ✨</p>
     <div class="btns">
@@ -297,15 +117,15 @@
     <p class="sub">Pilih 1 tempat tujuan & atur jamnya ya</p>
 
     <div class="opsi-list">
-      <label class="opsi-item">
+      <label class="opsi-item" onclick="setTujuan('Pergi ke pantai')">
         <div class="opsi-kiri">
           <span class="opsi-icon">🏖️</span>
           <span class="opsi-teks">Pergi ke pantai</span>
         </div>
-        <input type="radio" name="tujuan" value="Pergi ke pantai">
+        <input type="radio" name="tujuan" value="Pergi ke pantai" checked>
       </label>
 
-      <label class="opsi-item">
+      <label class="opsi-item" onclick="setTujuan('Pergi ke Danau Moat')">
         <div class="opsi-kiri">
           <span class="opsi-icon">🏞️</span>
           <span class="opsi-teks">Pergi ke Danau Moat</span>
@@ -313,7 +133,7 @@
         <input type="radio" name="tujuan" value="Pergi ke Danau Moat">
       </label>
 
-      <label class="opsi-item">
+      <label class="opsi-item" onclick="setTujuan('Pergi ke Manado')">
         <div class="opsi-kiri">
           <span class="opsi-icon">🏙️</span>
           <span class="opsi-teks">Pergi ke Manado</span>
@@ -321,7 +141,7 @@
         <input type="radio" name="tujuan" value="Pergi ke Manado">
       </label>
 
-      <label class="opsi-item">
+      <label class="opsi-item" onclick="setTujuan('Di Kotamobagu saja')">
         <div class="opsi-kiri">
           <span class="opsi-icon">☕</span>
           <span class="opsi-teks">Di Kotamobagu saja</span>
@@ -332,70 +152,44 @@
 
     <div class="jam-group">
       <label for="pilih-jam">⏰ Jam berapa siap?</label>
-      <input type="time" id="pilih-jam" value="16:00">
+      <input type="time" id="pilih-jam" value="16:00" onchange="updateWA()" oninput="updateWA()">
     </div>
 
-    <div class="toast-error" id="pesan-error">Pilih dulu salah satu tempat tujuannya ya 😊</div>
-
-    <div class="aksi-btns">
-      <button id="btn-kirim" type="button" onclick="kirimWhatsApp()">Kirim ke WhatsApp 🚀</button>
-      <button id="btn-salin" type="button" onclick="salinPesan()">📋 Salin Teks Jawaban (Cadangan)</button>
-    </div>
-
-    <div class="toast-sukses" id="pesan-sukses">Jawaban tersalin! Tinggal tempel (paste) di WhatsApp ya 🥰</div>
+    <!-- Link murni HTTPS tanpa JS blocker -->
+    <a id="link-wa" href="https://wa.me" target="_top">
+      Kirim ke WhatsApp 🚀
+    </a>
+    <p class="catatan-buka">Jika tidak terbuka, ketuk titik tiga di pojok kanan atas lalu pilih <b>Buka di Chrome / Browser</b></p>
   </div>
 
   <script>
     var skala = 1;
-    var nomorWA = "628891261808";
+    var tempatTerpilih = "Pergi ke pantai";
 
     function lari() {
       var btnNo = document.getElementById("btn-no");
       var btnYes = document.getElementById("btn-yes");
-      
       var maxX = Math.max(20, window.innerWidth - 120);
       var maxY = Math.max(20, window.innerHeight - 60);
-
-      var x = Math.floor(Math.random() * maxX);
-      var y = Math.floor(Math.random() * maxY);
-
       btnNo.style.position = "fixed";
-      btnNo.style.left = x + "px";
-      btnNo.style.top = y + "px";
-
-      skala = skala + 0.12;
+      btnNo.style.left = Math.floor(Math.random() * maxX) + "px";
+      btnNo.style.top = Math.floor(Math.random() * maxY) + "px";
+      skala += 0.12;
       btnYes.style.transform = "scale(" + skala + ")";
     }
 
-    function buatTeksPesan() {
-      var pilihan = document.querySelector('input[name="tujuan"]:checked');
+    function setTujuan(namaTempat) {
+      tempatTerpilih = namaTempat;
+      updateWA();
+    }
+
+    function updateWA() {
       var jam = document.getElementById("pilih-jam").value || "16:00";
-      var errBox = document.getElementById("pesan-error");
-
-      if (!pilihan) {
-        errBox.style.display = "block";
-        return null;
-      }
-
-      errBox.style.display = "none";
-      return "Okeeeeyyy gas! Minggu ini kita jalan:\n\n" +
-             "*Pilihan Tempat:* " + pilihan.value + "\n" +
-             "*Jam:* " + jam + " WITA";
+      var pesan = "Okeeeeyyy gas! Minggu ini kita jalan:\n\n" +
+                  "Pilihan Tempat: " + tempatTerpilih + "\n" +
+                  "Jam: " + jam + " WITA";
+      document.getElementById("link-wa").href = "https://wa.me" + encodeURIComponent(pesan);
     }
-
-    function kirimWhatsApp() {
-      var pesan = buatTeksPesan();
-      if (!pesan) return;
-
-      var encodedPesan = encodeURIComponent(pesan);
-
-      // Metode 1: Buka langsung aplikasi WhatsApp di HP
-      window.location.assign("whatsapp://send?phone=" + nomorWA + "&text=" + encodedPesan);
-
-      // Metode 2: Cadangan otomatis ke API WhatsApp jika browser tidak mendukung skema whatsapp://
-      setTimeout(function() {
-        window.top.location.href = "https://whatsapp.com" + nomorWA + "&text=" + encodedPesan;
-      }, 600);
-    }
-
-    function salinPesan() {
+  </script>
+</body>
+</html>
