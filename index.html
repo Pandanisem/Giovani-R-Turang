@@ -23,7 +23,6 @@
       overflow-x: hidden;
     }
 
-    /* Kontrol pindah halaman tanpa JavaScript */
     #pindah-halaman {
       display: none;
     }
@@ -43,7 +42,6 @@
       text-align: left;
     }
 
-    /* Saat label YES diklik, halaman 1 hilang & halaman 2 muncul otomatis */
     #pindah-halaman:checked ~ #halaman-1 {
       display: none;
     }
@@ -216,9 +214,16 @@
       color: #2b2d42;
     }
 
+    .aksi-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
     #btn-kirim {
       width: 100%;
-      text-decoration: none;
+      border: none;
+      font-family: inherit;
       font-weight: 700;
       background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
       color: #ffffff;
@@ -226,10 +231,20 @@
       font-size: 16px;
       border-radius: 16px;
       box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      cursor: pointer;
+    }
+
+    #btn-salin {
+      width: 100%;
+      border: 1.5px solid #ffccd5;
+      font-family: inherit;
+      font-weight: 600;
+      background: #fff0f3;
+      color: #a4133c;
+      padding: 12px;
+      font-size: 14px;
+      border-radius: 14px;
+      cursor: pointer;
     }
 
     .toast-error {
@@ -243,6 +258,19 @@
       margin-bottom: 14px;
       text-align: center;
       border: 1px solid #ffa8a8;
+    }
+
+    .toast-sukses {
+      display: none;
+      background: #d3f9d8;
+      color: #2b8a3e;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-top: 10px;
+      text-align: center;
+      border: 1px solid #8ce99a;
     }
   </style>
 </head>
@@ -274,7 +302,7 @@
           <span class="opsi-icon">🏖️</span>
           <span class="opsi-teks">Pergi ke pantai</span>
         </div>
-        <input type="radio" name="tujuan" value="Pergi ke pantai" onchange="updateLink()">
+        <input type="radio" name="tujuan" value="Pergi ke pantai">
       </label>
 
       <label class="opsi-item">
@@ -282,7 +310,7 @@
           <span class="opsi-icon">🏞️</span>
           <span class="opsi-teks">Pergi ke Danau Moat</span>
         </div>
-        <input type="radio" name="tujuan" value="Pergi ke Danau Moat" onchange="updateLink()">
+        <input type="radio" name="tujuan" value="Pergi ke Danau Moat">
       </label>
 
       <label class="opsi-item">
@@ -290,7 +318,7 @@
           <span class="opsi-icon">🏙️</span>
           <span class="opsi-teks">Pergi ke Manado</span>
         </div>
-        <input type="radio" name="tujuan" value="Pergi ke Manado" onchange="updateLink()">
+        <input type="radio" name="tujuan" value="Pergi ke Manado">
       </label>
 
       <label class="opsi-item">
@@ -298,22 +326,28 @@
           <span class="opsi-icon">☕</span>
           <span class="opsi-teks">Di Kotamobagu saja</span>
         </div>
-        <input type="radio" name="tujuan" value="Di Kotamobagu saja" onchange="updateLink()">
+        <input type="radio" name="tujuan" value="Di Kotamobagu saja">
       </label>
     </div>
 
     <div class="jam-group">
       <label for="pilih-jam">⏰ Jam berapa siap?</label>
-      <input type="time" id="pilih-jam" value="16:00" onchange="updateLink()" oninput="updateLink()">
+      <input type="time" id="pilih-jam" value="16:00">
     </div>
 
     <div class="toast-error" id="pesan-error">Pilih dulu salah satu tempat tujuannya ya 😊</div>
 
-    <a id="btn-kirim" href="https://wa.me!" onclick="return cekPilihan()">Kirim ke WhatsApp 🚀</a>
+    <div class="aksi-btns">
+      <button id="btn-kirim" type="button" onclick="kirimWhatsApp()">Kirim ke WhatsApp 🚀</button>
+      <button id="btn-salin" type="button" onclick="salinPesan()">📋 Salin Teks Jawaban (Cadangan)</button>
+    </div>
+
+    <div class="toast-sukses" id="pesan-sukses">Jawaban tersalin! Tinggal tempel (paste) di WhatsApp ya 🥰</div>
   </div>
 
   <script>
     var skala = 1;
+    var nomorWA = "628891261808";
 
     function lari() {
       var btnNo = document.getElementById("btn-no");
@@ -333,32 +367,35 @@
       btnYes.style.transform = "scale(" + skala + ")";
     }
 
-    function updateLink() {
+    function buatTeksPesan() {
       var pilihan = document.querySelector('input[name="tujuan"]:checked');
       var jam = document.getElementById("pilih-jam").value || "16:00";
-      var btnKirim = document.getElementById("btn-kirim");
-      var errBox = document.getElementById("pesan-error");
-
-      if (pilihan) {
-        errBox.style.display = "none";
-        var pesan = "Okeeeeyyy gas! Minggu ini kita jalan:\n\n" +
-                    "*Pilihan Tempat:* " + pilihan.value + "\n" +
-                    "*Jam:* " + jam + " WITA";
-        btnKirim.href = "https://wa.me" + encodeURIComponent(pesan);
-      }
-    }
-
-    function cekPilihan() {
-      var pilihan = document.querySelector('input[name="tujuan"]:checked');
       var errBox = document.getElementById("pesan-error");
 
       if (!pilihan) {
         errBox.style.display = "block";
-        return false;
+        return null;
       }
-      updateLink();
-      return true;
+
+      errBox.style.display = "none";
+      return "Okeeeeyyy gas! Minggu ini kita jalan:\n\n" +
+             "*Pilihan Tempat:* " + pilihan.value + "\n" +
+             "*Jam:* " + jam + " WITA";
     }
-  </script>
-</body>
-</html>
+
+    function kirimWhatsApp() {
+      var pesan = buatTeksPesan();
+      if (!pesan) return;
+
+      var encodedPesan = encodeURIComponent(pesan);
+
+      // Metode 1: Buka langsung aplikasi WhatsApp di HP
+      window.location.assign("whatsapp://send?phone=" + nomorWA + "&text=" + encodedPesan);
+
+      // Metode 2: Cadangan otomatis ke API WhatsApp jika browser tidak mendukung skema whatsapp://
+      setTimeout(function() {
+        window.top.location.href = "https://whatsapp.com" + nomorWA + "&text=" + encodedPesan;
+      }, 600);
+    }
+
+    function salinPesan() {
