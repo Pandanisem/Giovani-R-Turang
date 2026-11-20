@@ -23,6 +23,11 @@
       overflow-x: hidden;
     }
 
+    /* Kontrol pindah halaman tanpa JavaScript */
+    #pindah-halaman {
+      display: none;
+    }
+
     .card {
       background: #ffffff;
       padding: 36px 28px;
@@ -31,6 +36,19 @@
       width: 100%;
       box-shadow: 0 20px 40px rgba(201, 24, 74, 0.15);
       text-align: center;
+    }
+
+    #halaman-2 {
+      display: none;
+      text-align: left;
+    }
+
+    /* Saat label YES diklik, halaman 1 hilang & halaman 2 muncul otomatis */
+    #pindah-halaman:checked ~ #halaman-1 {
+      display: none;
+    }
+    #pindah-halaman:checked ~ #halaman-2 {
+      display: block;
     }
 
     .cat-wrapper {
@@ -76,36 +94,34 @@
       min-height: 52px;
     }
 
-    button {
+    .btn-yes {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 15px;
+      background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #btn-no {
       padding: 14px 32px;
       border-radius: 999px;
       font-family: inherit;
       font-weight: 700;
       font-size: 15px;
       border: none;
-      cursor: pointer;
-    }
-
-    #btn-yes {
-      background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-      color: #ffffff;
-      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
-      transition: transform 0.2s ease;
-    }
-
-    #btn-no {
       background: #f1f3f5;
       color: #495057;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
       z-index: 999;
     }
 
     /* HALAMAN 2 */
-    #halaman-2 {
-      display: none;
-      text-align: left;
-    }
-
     #halaman-2 h2 {
       font-size: 22px;
       font-weight: 800;
@@ -136,13 +152,11 @@
       border-radius: 16px;
       border: 2px solid #ffe5ec;
       cursor: pointer;
-      transition: all 0.2s ease;
     }
 
     .opsi-item:has(input:checked) {
       background: #fff0f3;
       border-color: #ff4d6d;
-      box-shadow: 0 6px 15px rgba(255, 77, 109, 0.15);
     }
 
     .opsi-kiri {
@@ -172,7 +186,6 @@
       width: 20px;
       height: 20px;
       accent-color: #ff4d6d;
-      cursor: pointer;
     }
 
     .jam-group {
@@ -203,7 +216,6 @@
       color: #2b2d42;
     }
 
-    /* Tautan langsung (<a>) berbentuk tombol */
     #btn-kirim {
       width: 100%;
       text-decoration: none;
@@ -218,7 +230,6 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      cursor: pointer;
     }
 
     .toast-error {
@@ -237,6 +248,8 @@
 </head>
 <body>
 
+  <input type="checkbox" id="pindah-halaman">
+
   <!-- HALAMAN 1 -->
   <div class="card" id="halaman-1">
     <div class="cat-wrapper">
@@ -245,8 +258,8 @@
     <h1>Suka Ba Jalan Ni Minggu?</h1>
     <p>Jang ba paksa, cuma boleh jo lo ✨</p>
     <div class="btns">
-      <button id="btn-yes" type="button">Yes, Gas!</button>
-      <button id="btn-no" type="button">No</button>
+      <label for="pindah-halaman" class="btn-yes" id="btn-yes">Yes, Gas!</label>
+      <button id="btn-no" type="button" onclick="lari()" ontouchstart="lari()" onmouseover="lari()">No</button>
     </div>
   </div>
 
@@ -261,7 +274,7 @@
           <span class="opsi-icon">🏖️</span>
           <span class="opsi-teks">Pergi ke pantai</span>
         </div>
-        <input type="radio" name="tujuan" value="Pergi ke pantai">
+        <input type="radio" name="tujuan" value="Pergi ke pantai" onchange="updateLink()">
       </label>
 
       <label class="opsi-item">
@@ -269,7 +282,7 @@
           <span class="opsi-icon">🏞️</span>
           <span class="opsi-teks">Pergi ke Danau Moat</span>
         </div>
-        <input type="radio" name="tujuan" value="Pergi ke Danau Moat">
+        <input type="radio" name="tujuan" value="Pergi ke Danau Moat" onchange="updateLink()">
       </label>
 
       <label class="opsi-item">
@@ -277,7 +290,7 @@
           <span class="opsi-icon">🏙️</span>
           <span class="opsi-teks">Pergi ke Manado</span>
         </div>
-        <input type="radio" name="tujuan" value="Pergi ke Manado">
+        <input type="radio" name="tujuan" value="Pergi ke Manado" onchange="updateLink()">
       </label>
 
       <label class="opsi-item">
@@ -285,93 +298,67 @@
           <span class="opsi-icon">☕</span>
           <span class="opsi-teks">Di Kotamobagu saja</span>
         </div>
-        <input type="radio" name="tujuan" value="Di Kotamobagu saja">
+        <input type="radio" name="tujuan" value="Di Kotamobagu saja" onchange="updateLink()">
       </label>
     </div>
 
     <div class="jam-group">
       <label for="pilih-jam">⏰ Jam berapa siap?</label>
-      <input type="time" id="pilih-jam" value="16:00">
+      <input type="time" id="pilih-jam" value="16:00" onchange="updateLink()" oninput="updateLink()">
     </div>
 
-    <div class="toast-error" id="pesan-error"></div>
+    <div class="toast-error" id="pesan-error">Pilih dulu salah satu tempat tujuannya ya 😊</div>
 
-    <!-- Menggunakan tag <a> asli agar Android/iOS mengenali intent WhatsApp secara native -->
-    <a id="btn-kirim" href="#">Kirim ke WhatsApp 🚀</a>
+    <a id="btn-kirim" href="https://wa.me!" onclick="return cekPilihan()">Kirim ke WhatsApp 🚀</a>
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const hal1 = document.getElementById("halaman-1");
-      const hal2 = document.getElementById("halaman-2");
-      const btnYes = document.getElementById("btn-yes");
-      const btnNo = document.getElementById("btn-no");
-      const btnKirim = document.getElementById("btn-kirim");
-      const errBox = document.getElementById("pesan-error");
-      const radioButtons = document.querySelectorAll('input[name="tujuan"]');
-      const inputJam = document.getElementById("pilih-jam");
+    var skala = 1;
 
-      const noWA = "628891261808";
-      let skalaYes = 1;
+    function lari() {
+      var btnNo = document.getElementById("btn-no");
+      var btnYes = document.getElementById("btn-yes");
+      
+      var maxX = Math.max(20, window.innerWidth - 120);
+      var maxY = Math.max(20, window.innerHeight - 60);
 
-      // 1. Pindah halaman saat klik YES
-      btnYes.addEventListener("click", function () {
-        hal1.style.display = "none";
-        btnNo.style.display = "none";
-        hal2.style.display = "block";
-      });
+      var x = Math.floor(Math.random() * maxX);
+      var y = Math.floor(Math.random() * maxY);
 
-      // 2. Tombol NO kabur
-      function kabur(e) {
-        if (e) e.preventDefault();
-        
-        const lebarLayar = window.innerWidth;
-        const tinggiLayar = window.innerHeight;
-        const maxX = Math.max(20, lebarLayar - btnNo.offsetWidth - 20);
-        const maxY = Math.max(20, tinggiLayar - btnNo.offsetHeight - 20);
+      btnNo.style.position = "fixed";
+      btnNo.style.left = x + "px";
+      btnNo.style.top = y + "px";
 
-        const x = Math.floor(Math.random() * maxX);
-        const y = Math.floor(Math.random() * maxY);
+      skala = skala + 0.12;
+      btnYes.style.transform = "scale(" + skala + ")";
+    }
 
-        btnNo.style.position = "fixed";
-        btnNo.style.left = x + "px";
-        btnNo.style.top = y + "px";
+    function updateLink() {
+      var pilihan = document.querySelector('input[name="tujuan"]:checked');
+      var jam = document.getElementById("pilih-jam").value || "16:00";
+      var btnKirim = document.getElementById("btn-kirim");
+      var errBox = document.getElementById("pesan-error");
 
-        skalaYes += 0.12;
-        btnYes.style.transform = "scale(" + skalaYes + ")";
+      if (pilihan) {
+        errBox.style.display = "none";
+        var pesan = "Okeeeeyyy gas! Minggu ini kita jalan:\n\n" +
+                    "*Pilihan Tempat:* " + pilihan.value + "\n" +
+                    "*Jam:* " + jam + " WITA";
+        btnKirim.href = "https://wa.me" + encodeURIComponent(pesan);
       }
+    }
 
-      btnNo.addEventListener("mouseover", kabur);
-      btnNo.addEventListener("touchstart", kabur, { passive: false });
-      btnNo.addEventListener("click", kabur);
+    function cekPilihan() {
+      var pilihan = document.querySelector('input[name="tujuan"]:checked');
+      var errBox = document.getElementById("pesan-error");
 
-      // 3. Perbarui atribut href secara otomatis setiap ada perubahan pilihan
-      function perbaruiLinkWA() {
-        const pilihanTempat = document.querySelector('input[name="tujuan"]:checked');
-        const jam = inputJam.value || "16:00";
-
-        if (pilihanTempat) {
-          errBox.style.display = "none";
-          const teksPesan =
-            "Okeeeeyyy gas! Minggu ini kita jalan:\n\n" +
-            "*Pilihan Tempat:* " + pilihanTempat.value + "\n" +
-            "*Jam:* " + jam + " WITA";
-
-          btnKirim.href = "https://whatsapp.com" + noWA + "&text=" + encodeURIComponent(teksPesan);
-        } else {
-          btnKirim.href = "#";
-        }
+      if (!pilihan) {
+        errBox.style.display = "block";
+        return false;
       }
-
-      radioButtons.forEach(function (radio) {
-        radio.addEventListener("change", perbaruiLinkWA);
-      });
-      inputJam.addEventListener("change", perbaruiLinkWA);
-
-      // 4. Validasi saat tombol Kirim diklik
-      btnKirim.addEventListener("click", function (e) {
-        const pilihanTempat = document.querySelector('input[name="tujuan"]:checked');
-        const jam = inputJam.value;
-
-        if (!pilihanTempat) {
-          e.preventDefault();
+      updateLink();
+      return true;
+    }
+  </script>
+</body>
+</html>
