@@ -203,8 +203,11 @@
       color: #2b2d42;
     }
 
+    /* Tautan langsung (<a>) berbentuk tombol */
     #btn-kirim {
       width: 100%;
+      text-decoration: none;
+      font-weight: 700;
       background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
       color: #ffffff;
       padding: 16px;
@@ -215,6 +218,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      cursor: pointer;
     }
 
     .toast-error {
@@ -292,7 +296,8 @@
 
     <div class="toast-error" id="pesan-error"></div>
 
-    <button id="btn-kirim" type="button">Kirim ke WhatsApp 🚀</button>
+    <!-- Menggunakan tag <a> asli agar Android/iOS mengenali intent WhatsApp secara native -->
+    <a id="btn-kirim" href="#">Kirim ke WhatsApp 🚀</a>
   </div>
 
   <script>
@@ -303,7 +308,10 @@
       const btnNo = document.getElementById("btn-no");
       const btnKirim = document.getElementById("btn-kirim");
       const errBox = document.getElementById("pesan-error");
+      const radioButtons = document.querySelectorAll('input[name="tujuan"]');
+      const inputJam = document.getElementById("pilih-jam");
 
+      const noWA = "628891261808";
       let skalaYes = 1;
 
       // 1. Pindah halaman saat klik YES
@@ -337,43 +345,33 @@
       btnNo.addEventListener("touchstart", kabur, { passive: false });
       btnNo.addEventListener("click", kabur);
 
-      // 3. Kirim ke WhatsApp menggunakan wa.me
-      btnKirim.addEventListener("click", function () {
-        const noWA = "628891261808";
+      // 3. Perbarui atribut href secara otomatis setiap ada perubahan pilihan
+      function perbaruiLinkWA() {
         const pilihanTempat = document.querySelector('input[name="tujuan"]:checked');
-        const jam = document.getElementById("pilih-jam").value;
+        const jam = inputJam.value || "16:00";
+
+        if (pilihanTempat) {
+          errBox.style.display = "none";
+          const teksPesan =
+            "Okeeeeyyy gas! Minggu ini kita jalan:\n\n" +
+            "*Pilihan Tempat:* " + pilihanTempat.value + "\n" +
+            "*Jam:* " + jam + " WITA";
+
+          btnKirim.href = "https://whatsapp.com" + noWA + "&text=" + encodeURIComponent(teksPesan);
+        } else {
+          btnKirim.href = "#";
+        }
+      }
+
+      radioButtons.forEach(function (radio) {
+        radio.addEventListener("change", perbaruiLinkWA);
+      });
+      inputJam.addEventListener("change", perbaruiLinkWA);
+
+      // 4. Validasi saat tombol Kirim diklik
+      btnKirim.addEventListener("click", function (e) {
+        const pilihanTempat = document.querySelector('input[name="tujuan"]:checked');
+        const jam = inputJam.value;
 
         if (!pilihanTempat) {
-          errBox.textContent = "Pilih dulu salah satu tempat tujuannya ya 😊";
-          errBox.style.display = "block";
-          return;
-        }
-
-        if (!jam) {
-          errBox.textContent = "Atur jam jalannya dulu ya ⏰";
-          errBox.style.display = "block";
-          return;
-        }
-
-        errBox.style.display = "none";
-
-        const teksPesan =
-          "Okeeeeyyy gas! Minggu ini kita jalan:\n\n" +
-          "*Pilihan Tempat:* " + pilihanTempat.value + "\n" +
-          "*Jam:* " + jam + " WITA";
-
-        const urlWA = "https://wa.me" + noWA + "?text=" + encodeURIComponent(teksPesan);
-        
-        // Membuka link WA dengan cara yang aman di semua browser HP
-        const linkSementara = document.createElement("a");
-        linkSementara.href = urlWA;
-        linkSementara.target = "_blank";
-        linkSementara.rel = "noopener noreferrer";
-        document.body.appendChild(linkSementara);
-        linkSementara.click();
-        document.body.removeChild(linkSementara);
-      });
-    });
-  </script>
-</body>
-</html>
+          e.preventDefault();
