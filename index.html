@@ -41,10 +41,17 @@
       from { transform: translateY(2px) rotate(-3deg); }
       to { transform: translateY(-8px) rotate(3deg); }
     }
-    h1 { font-size: 24px; font-weight: 800; color: #a4133c; margin-bottom: 8px; }
-    p { font-size: 14px; color: #6c5860; margin-bottom: 28px; }
+    h1 { font-size: 24px; font-weight: 800; color: #a4133c; margin-bottom: 12px; }
+    
+    /* Teks disembunyikan dulu sebelum tombol No disentuh */
+    #teks-paksa {
+      display: none;
+      font-size: 14px;
+      color: #6c5860;
+      margin-bottom: 24px;
+    }
 
-    .btns { display: flex; justify-content: center; align-items: center; gap: 16px; min-height: 52px; }
+    .btns { display: flex; justify-content: center; align-items: center; gap: 16px; min-height: 52px; margin-top: 16px; }
     .btn-yes {
       display: inline-block; padding: 14px 32px; border-radius: 999px;
       font-weight: 700; font-size: 15px;
@@ -58,7 +65,7 @@
     }
 
     #halaman-2 h2 { font-size: 22px; font-weight: 800; color: #a4133c; margin-bottom: 6px; text-align: center; }
-    #halaman-2 .sub { text-align: center; margin-bottom: 22px; font-size: 13.5px; }
+    #halaman-2 .sub { text-align: center; margin-bottom: 22px; font-size: 13.5px; color: #6c5860; }
     .opsi-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
     .opsi-item {
       display: flex; align-items: center; justify-content: space-between;
@@ -107,7 +114,7 @@
   <div class="card" id="halaman-1">
     <div class="cat-wrapper"><span class="cat-emoji">🥺🐱</span></div>
     <h1>Suka Ba Jalan Ni Minggu?</h1>
-    <p>Jang ba paksa, cuma boleh jo lo ✨</p>
+    <p id="teks-paksa">Jang ba paksa, cuma boleh jawab io ✨</p>
     <div class="btns">
       <label for="pindah-halaman" class="btn-yes" id="yes">Yes, Gas!</label>
       <button id="no" type="button">No</button>
@@ -116,8 +123,8 @@
 
   <!-- HALAMAN 2 -->
   <div class="card" id="halaman-2">
-    <h2>Yey! Mau Kemana Kita? 🥰</h2>
-    <p class="sub">Pilih 1 tempat tujuan & atur jamnya ya</p>
+    <h2>Yey! Mo Kamana Torang? 🥰</h2>
+    <p class="sub">Pilih Jo Deng Depe Jam Le</p>
 
     <div class="opsi-list">
       <label class="opsi-item">
@@ -158,7 +165,7 @@
       <input type="time" id="pilih-jam" value="16:00">
     </div>
 
-    <div class="toast-error" id="pesan-error">Pilih dulu salah satu tempat tujuannya ya 😊</div>
+    <div class="toast-error" id="pesan-error">Pilih dulu salah satu ya 😊</div>
 
     <button id="btn-kirim" type="button" onclick="bukaWA()">Kirim ke WhatsApp 🚀</button>
   </div>
@@ -177,12 +184,12 @@
       errBox.style.display = "none";
 
       const no = "628891261808";
-      const teks = "Okeeeeyyy gas! Minggu ini kita jalan:\n\n" +
+      const teks = "Okeeeeyyy gas! Minggu ini torang jalan:\n\n" +
                    "Pilihan Tempat: " + pilihan.value + "\n" +
                    "Jam: " + jam + " WITA";
       const pesan = encodeURIComponent(teks);
 
-      // 1. Panggil langsung aplikasi WhatsApp di HP (sama persis seperti kode asli Anda)
+      // 1. Panggil langsung aplikasi WhatsApp di HP
       window.top.location.href = "whatsapp://send?phone=" + no + "&text=" + pesan;
 
       // 2. Cadangan jika dibuka lewat Laptop/PC
@@ -193,9 +200,13 @@
 
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
+    const teksPaksa = document.getElementById("teks-paksa");
     let skalaYes = 1;
 
     function kabur() {
+      // Munculkan teks saat tombol No pertama kali disentuh/ditekan
+      teksPaksa.style.display = "block";
+
       const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 24);
       const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 24);
       noBtn.style.position = "fixed";
