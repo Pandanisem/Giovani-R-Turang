@@ -136,6 +136,13 @@
       border-radius: 16px;
       border: 2px solid #ffe5ec;
       cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .opsi-item:has(input:checked) {
+      background: #fff0f3;
+      border-color: #ff4d6d;
+      box-shadow: 0 6px 15px rgba(255, 77, 109, 0.15);
     }
 
     .opsi-kiri {
@@ -161,10 +168,11 @@
       color: #2b2d42;
     }
 
-    .opsi-item input[type="checkbox"] {
+    .opsi-item input[type="radio"] {
       width: 20px;
       height: 20px;
       accent-color: #ff4d6d;
+      cursor: pointer;
     }
 
     .jam-group {
@@ -203,6 +211,10 @@
       font-size: 16px;
       border-radius: 16px;
       box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     .toast-error {
@@ -237,7 +249,7 @@
   <!-- HALAMAN 2 -->
   <div class="card" id="halaman-2">
     <h2>Yey! Mau Kemana Kita? 🥰</h2>
-    <p class="sub">Pilih tempat (boleh lebih dari satu) & atur jamnya</p>
+    <p class="sub">Pilih 1 tempat tujuan & atur jamnya ya</p>
 
     <div class="opsi-list">
       <label class="opsi-item">
@@ -245,7 +257,7 @@
           <span class="opsi-icon">🏖️</span>
           <span class="opsi-teks">Pergi ke pantai</span>
         </div>
-        <input type="checkbox" name="tujuan" value="Pergi ke pantai">
+        <input type="radio" name="tujuan" value="Pergi ke pantai">
       </label>
 
       <label class="opsi-item">
@@ -253,7 +265,7 @@
           <span class="opsi-icon">🏞️</span>
           <span class="opsi-teks">Pergi ke Danau Moat</span>
         </div>
-        <input type="checkbox" name="tujuan" value="Pergi ke Danau Moat">
+        <input type="radio" name="tujuan" value="Pergi ke Danau Moat">
       </label>
 
       <label class="opsi-item">
@@ -261,7 +273,7 @@
           <span class="opsi-icon">🏙️</span>
           <span class="opsi-teks">Pergi ke Manado</span>
         </div>
-        <input type="checkbox" name="tujuan" value="Pergi ke Manado">
+        <input type="radio" name="tujuan" value="Pergi ke Manado">
       </label>
 
       <label class="opsi-item">
@@ -269,7 +281,7 @@
           <span class="opsi-icon">☕</span>
           <span class="opsi-teks">Di Kotamobagu saja</span>
         </div>
-        <input type="checkbox" name="tujuan" value="Di Kotamobagu saja">
+        <input type="radio" name="tujuan" value="Di Kotamobagu saja">
       </label>
     </div>
 
@@ -294,14 +306,14 @@
 
       let skalaYes = 1;
 
-      // 1. Fungsi tombol YES untuk pindah halaman
+      // 1. Pindah halaman saat klik YES
       btnYes.addEventListener("click", function () {
         hal1.style.display = "none";
         btnNo.style.display = "none";
         hal2.style.display = "block";
       });
 
-      // 2. Fungsi tombol NO lari
+      // 2. Tombol NO kabur
       function kabur(e) {
         if (e) e.preventDefault();
         
@@ -325,14 +337,14 @@
       btnNo.addEventListener("touchstart", kabur, { passive: false });
       btnNo.addEventListener("click", kabur);
 
-      // 3. Fungsi tombol KIRIM ke WhatsApp
+      // 3. Kirim ke WhatsApp menggunakan wa.me
       btnKirim.addEventListener("click", function () {
         const noWA = "628891261808";
-        const checkboxes = document.querySelectorAll('input[name="tujuan"]:checked');
+        const pilihanTempat = document.querySelector('input[name="tujuan"]:checked');
         const jam = document.getElementById("pilih-jam").value;
 
-        if (checkboxes.length === 0) {
-          errBox.textContent = "Pilih dulu minimal satu tempat tujuan ya 😊";
+        if (!pilihanTempat) {
+          errBox.textContent = "Pilih dulu salah satu tempat tujuannya ya 😊";
           errBox.style.display = "block";
           return;
         }
@@ -345,18 +357,21 @@
 
         errBox.style.display = "none";
 
-        let daftarTujuan = [];
-        checkboxes.forEach(function (item) {
-          daftarTujuan.push("• " + item.value);
-        });
-
         const teksPesan =
           "Okeeeeyyy gas! Minggu ini kita jalan:\n\n" +
-          "*Pilihan Tempat:*\n" + daftarTujuan.join("\n") + "\n\n" +
+          "*Pilihan Tempat:* " + pilihanTempat.value + "\n" +
           "*Jam:* " + jam + " WITA";
 
-        const urlWA = "https://whatsapp.com" + noWA + "&text=" + encodeURIComponent(teksPesan);
-        window.location.href = urlWA;
+        const urlWA = "https://wa.me" + noWA + "?text=" + encodeURIComponent(teksPesan);
+        
+        // Membuka link WA dengan cara yang aman di semua browser HP
+        const linkSementara = document.createElement("a");
+        linkSementara.href = urlWA;
+        linkSementara.target = "_blank";
+        linkSementara.rel = "noopener noreferrer";
+        document.body.appendChild(linkSementara);
+        linkSementara.click();
+        document.body.removeChild(linkSementara);
       });
     });
   </script>
